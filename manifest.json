@@ -1,27 +1,24 @@
 {
-  "name": "Everything Is Fine",
-  "short_name": "Fine",
-  "description": "A big red button for when you just need a moment.",
-  "start_url": "index.html",
+  "name": "Yurika - Anxiety Remover",
+  "short_name": "Yurika",
+  "description": "AI decision paths and immersive ambient views to reduce anxiety.",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#121214",
-  "theme_color": "#121214",
+  "background_color": "#0c0b14",
+  "theme_color": "#0c0b14",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/72x72/1f534.png",
-      "sizes": 72,
-      "type": "image/png"
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23a78bfa'/%3E%3Cstop offset='100%25' stop-color='%236ee7b7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='192' height='192' rx='40' fill='url(%23g)'/%3E%3Ctext x='96' y='128' font-family='Arial, sans-serif' font-size='100' font-weight='bold' text-anchor='middle' fill='%230c0b14'%3EY%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/128x128/1f534.png",
-      "sizes": 128,
-      "type": "image/png"
-    },
-    {
-      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/512x512/1f534.png",
-      "sizes": 512,
-      "type": "image/png"
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23a78bfa'/%3E%3Cstop offset='100%25' stop-color='%236ee7b7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='100' fill='url(%23g)'/%3E%3Ctext x='256' y='340' font-family='Arial, sans-serif' font-size='260' font-weight='bold' text-anchor='middle' fill='%230c0b14'%3EY%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }

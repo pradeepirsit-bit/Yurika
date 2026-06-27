@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Yurika · Anxiety Remover</title>
 
+    <!-- PWA META TAGS -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Yurika" />
+    <meta name="theme-color" content="#0c0b14" />
+    <meta name="description" content="Anxiety remover with AI decision paths and immersive ambient views." />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
@@ -871,7 +879,7 @@
             }
         }
 
-        /* --- NEW: Ocean Sunset --- */
+        /* --- Ocean Sunset --- */
         .fs-ocean .scene-bg {
             background: linear-gradient(180deg, #0b1a2e 0%, #1a3a5c 40%, #c67b4a 80%, #d4a05a 100%);
         }
@@ -939,7 +947,7 @@
             }
         }
 
-        /* --- NEW: Forest Glade --- */
+        /* --- Forest Glade --- */
         .fs-forest .scene-bg {
             background: linear-gradient(180deg, #0d1f0d, #1a3a1a 50%, #2a4a1a 100%);
         }
@@ -1016,7 +1024,7 @@
             }
         }
 
-        /* --- NEW: Aurora Skies --- */
+        /* --- Aurora Skies --- */
         .fs-aurora .scene-bg {
             background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3a 40%, #0a1a2a 100%);
         }
@@ -1233,7 +1241,7 @@
             <div class="logo">
                 <div class="logo-icon">Y</div>
                 <h1>Yurika</h1>
-                <span>v2.2</span>
+                <span>v3.0</span>
             </div>
             <div class="status-dot" title="Calm mode"></div>
         </header>
@@ -1266,7 +1274,6 @@
                     <span id="suggestionText">Based on your last input, <strong>Cosmic Drift</strong> might help clear your mind.</span>
                 </div>
                 <div class="ambient-grid" id="ambientGrid">
-                    <!-- 7 scenes now -->
                     <div class="ambient-card" data-scene="cosmic">
                         <div class="preview-scene cosmic">🌌</div>
                         <div class="scene-label">Cosmic Drift</div>
@@ -1321,20 +1328,17 @@
 
     <!-- ========== FULLSCREEN OVERLAY ========== -->
     <div class="fullscreen-overlay" id="fsOverlay">
-        <!-- Cosmic -->
         <div class="fs-scene fs-cosmic active" data-scene="cosmic">
             <div class="scene-bg"></div>
             <div class="stars"></div>
             <div class="fs-scene-name">Cosmic Drift</div>
         </div>
-        <!-- Rain -->
         <div class="fs-scene fs-rain" data-scene="rain">
             <div class="scene-bg"></div>
             <div class="rain-blur"></div>
             <div class="rain-drops"></div>
             <div class="fs-scene-name">Rainy Window</div>
         </div>
-        <!-- Zen -->
         <div class="fs-scene fs-zen" data-scene="zen">
             <div class="scene-bg"></div>
             <div class="ripple-container">
@@ -1345,7 +1349,6 @@
             </div>
             <div class="fs-scene-name">Zen Garden</div>
         </div>
-        <!-- Fire -->
         <div class="fs-scene fs-fire" data-scene="fire">
             <div class="scene-bg"></div>
             <div class="flame"></div>
@@ -1353,7 +1356,6 @@
             <div class="sparks"></div>
             <div class="fs-scene-name">Campfire Hearth</div>
         </div>
-        <!-- Ocean -->
         <div class="fs-scene fs-ocean" data-scene="ocean">
             <div class="scene-bg"></div>
             <div class="wave-layer"></div>
@@ -1362,7 +1364,6 @@
             <div class="sun-glint"></div>
             <div class="fs-scene-name">Ocean Sunset</div>
         </div>
-        <!-- Forest -->
         <div class="fs-scene fs-forest" data-scene="forest">
             <div class="scene-bg"></div>
             <div class="sun-ray"></div>
@@ -1373,7 +1374,6 @@
             <div class="particle"></div>
             <div class="fs-scene-name">Forest Glade</div>
         </div>
-        <!-- Aurora -->
         <div class="fs-scene fs-aurora" data-scene="aurora">
             <div class="scene-bg"></div>
             <div class="aurora-curtain"></div>
@@ -1394,6 +1394,12 @@
     <script>
         (function() {
             'use strict';
+
+            // ============================================================
+            // 1. GEMINI API CONFIGURATION – PASTE YOUR KEY HERE
+            // ============================================================
+            const GEMINI_API_KEY = 'AQ.Ab8RN6K65Qe-DP9sEFsoJ48OKMsqDLtiLlu_DwN99qgqxmMVsg'; // <-- Paste your key here
+            const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_API_KEY;
 
             // ----- DOM refs -----
             const tabs = document.querySelectorAll('.nav-item');
@@ -1416,7 +1422,6 @@
             const fsScenes = document.querySelectorAll('.fs-scene');
             const ambientCards = document.querySelectorAll('.ambient-card');
             let currentSceneIndex = 0;
-            // UPDATED: 7 scene keys
             const sceneKeys = ['cosmic', 'rain', 'zen', 'fire', 'ocean', 'forest', 'aurora'];
             let isAudioOn = false;
 
@@ -1424,7 +1429,9 @@
             let cachedPaths = [];
             let selectedPathIndex = null;
 
-            // ----- MOCK DATA (unchanged) -----
+            // ============================================================
+            // 2. MOCK DATA (FALLBACK IF API FAILS)
+            // ============================================================
             const mockPaths = {
                 job: [
                     { title: 'The Stability Path', icon: '🛡️', desc: 'Choose the established company with a higher base salary. Focus on long-term security and structured growth.',
@@ -1505,7 +1512,98 @@
                 return steps.slice(0, 4);
             }
 
-            // ----- RENDER PATHS (unchanged) -----
+            // ============================================================
+            // 3. GEMINI API: GENERATE PATHS
+            // ============================================================
+            async function generatePathsWithGemini(problem) {
+                // Disable button while loading
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '✦ Thinking...';
+
+                try {
+                    const prompt = `
+You are Yurika, a calm and supportive AI guide designed to help people with anxiety.
+Your task is to help the user explore multiple solutions to their problem.
+
+The user's problem is: "${problem}"
+
+Generate exactly 3 distinct, actionable paths or solutions for this problem.
+For each path, provide:
+- A creative and descriptive title (max 5 words).
+- A single emoji that represents the path.
+- A clear, concise description of the path (1-2 sentences).
+- A key benefit (short phrase).
+- A potential risk or challenge to be aware of (short phrase).
+
+Format your response as a valid JSON array. Do not include any other text or markdown formatting outside the JSON.
+The JSON should have this exact structure:
+[
+  {
+    "title": "The Example Path",
+    "icon": "🚀",
+    "desc": "This is a clear description of the path.",
+    "benefit": "A key benefit of this path.",
+    "risk": "A potential risk of this path."
+  }
+]
+`;
+
+                    const response = await fetch(GEMINI_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{ text: prompt }]
+                            }]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`Gemini API error: ${errorData.error?.message || response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const generatedText = data.candidates[0].content.parts[0].text;
+
+                    // Parse the JSON (clean up any markdown wrapping)
+                    const jsonMatch = generatedText.match(/\[[\s\S]*\]/);
+                    if (!jsonMatch) {
+                        throw new Error('Could not parse Gemini response as JSON.');
+                    }
+                    const paths = JSON.parse(jsonMatch[0]);
+
+                    // Ensure we have exactly 3 paths, pad if needed
+                    while (paths.length < 3) {
+                        paths.push({
+                            title: "The Thoughtful Path",
+                            icon: "🧘",
+                            desc: "Take a moment to breathe and reflect on what feels right for you.",
+                            benefit: "Clarity and peace of mind.",
+                            risk: "Might take a little more time."
+                        });
+                    }
+                    return paths;
+
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    // Show a gentle error message (only once)
+                    if (!window._geminiErrorShown) {
+                        alert('Could not reach the AI. Using offline suggestions. Please check your API key and internet connection.');
+                        window._geminiErrorShown = true;
+                    }
+                    return getMockPaths(problem);
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = '✦ Generate Paths';
+                }
+            }
+
+            // ============================================================
+            // 4. RENDER PATHS (unchanged)
+            // ============================================================
             function renderPaths(paths, selectedIdx = null) {
                 emptyState.style.display = 'none';
                 pathsContainer.style.display = 'flex';
@@ -1594,8 +1692,10 @@
                 return card;
             }
 
-            // ----- GENERATE FLOW -----
-            generateBtn.addEventListener('click', function() {
+            // ============================================================
+            // 5. GENERATE BUTTON – now calls Gemini
+            // ============================================================
+            generateBtn.addEventListener('click', async function() {
                 const text = problemInput.value.trim();
                 if (!text) {
                     problemInput.placeholder = 'Please describe your problem first...';
@@ -1603,18 +1703,14 @@
                     setTimeout(() => { problemInput.style.borderColor = ''; }, 1500);
                     return;
                 }
-                this.disabled = true;
-                this.innerHTML = '✦ Thinking...';
-                setTimeout(() => {
-                    const paths = getMockPaths(text);
-                    cachedPaths = paths;
-                    selectedPathIndex = null;
-                    renderPaths(paths, null);
-                    suggestAmbient(text);
-                    this.disabled = false;
-                    this.innerHTML = '✦ Generate Paths';
-                    document.querySelector('.nav-item[data-tab="tabPaths"]').click();
-                }, 700);
+
+                // Call Gemini (or fallback)
+                const paths = await generatePathsWithGemini(text);
+                cachedPaths = paths;
+                selectedPathIndex = null;
+                renderPaths(paths, null);
+                suggestAmbient(text);
+                document.querySelector('.nav-item[data-tab="tabPaths"]').click();
             });
 
             problemInput.addEventListener('keydown', (e) => {
@@ -1623,7 +1719,9 @@
                 }
             });
 
-            // ----- SUGGEST AMBIENT (UPDATED with new scenes) -----
+            // ============================================================
+            // 6. SUGGEST AMBIENT (based on input)
+            // ============================================================
             function suggestAmbient(input) {
                 const lower = input.toLowerCase();
                 let scene = 'cosmic';
@@ -1665,7 +1763,9 @@
                 });
             }
 
-            // ----- TAB SWITCHING -----
+            // ============================================================
+            // 7. TAB SWITCHING
+            // ============================================================
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     tabs.forEach(t => t.classList.remove('active'));
@@ -1676,7 +1776,9 @@
                 });
             });
 
-            // ----- AMBIENT FULLSCREEN (UPDATED for 7 scenes) -----
+            // ============================================================
+            // 8. AMBIENT FULLSCREEN (unchanged)
+            // ============================================================
             function openFullscreen(sceneKey) {
                 const idx = sceneKeys.indexOf(sceneKey);
                 if (idx === -1) return;
@@ -1778,13 +1880,28 @@
                 }
             });
 
-            // Welcome
+            // ============================================================
+            // 9. PWA: SERVICE WORKER REGISTRATION
+            // ============================================================
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                        console.log('🌸 Yurika PWA: Service Worker registered successfully!', reg);
+                    }).catch(function(err) {
+                        console.log('🌸 Yurika PWA: Service Worker registration failed.', err);
+                    });
+                });
+            }
+
+            // ============================================================
+            // 10. WELCOME MESSAGE
+            // ============================================================
             setTimeout(() => {
                 suggestionBanner.classList.add('show');
                 suggestionText.innerHTML = 'Welcome to Yurika. 🌱 Share a problem, then <strong>select a path</strong> to see the next steps.';
             }, 500);
 
-            console.log('🌸 Yurika v2.2 – 7 ambient scenes loaded. Enjoy the calm.');
+            console.log('🌸 Yurika v3.0 – AI powered with Gemini. Enjoy the calm.');
         })();
     </script>
 

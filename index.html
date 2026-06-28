@@ -39,7 +39,6 @@
             justify-content: center;
             align-items: center;
             color: #e2e0f0;
-            /* No max-width on body */
         }
 
         /* ----- APP CONTAINER – FULL SCREEN ----- */
@@ -49,12 +48,12 @@
             height: 100vh;
             height: 100dvh;
             background: linear-gradient(145deg, #14121f 0%, #1a1727 100%);
-            box-shadow: none; /* Remove shadow for full‑screen */
+            box-shadow: none;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            border-radius: 0; /* No rounded corners */
+            border-radius: 0;
         }
 
         .app-container::before {
@@ -69,7 +68,7 @@
             z-index: 0;
         }
 
-        /* ----- HEADER (slightly smaller for full‑screen) ----- */
+        /* ----- HEADER ----- */
         .app-header {
             padding: 16px 24px 6px 24px;
             display: flex;
@@ -148,7 +147,7 @@
             z-index: 5;
             display: flex;
             flex-direction: column;
-            min-height: 0; /* Flex fix */
+            min-height: 0;
         }
 
         .tab-pane {
@@ -272,6 +271,14 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
+        /* Layout button active state – feedback when clicked */
+        .btn-secondary.layout-active {
+            background: rgba(110, 231, 183, 0.2);
+            border-color: #6ee7b7;
+            color: #6ee7b7;
+            transition: all 0.3s ease;
+        }
+
         /* ----- MINDMAP – FULL SCREEN CANVAS ----- */
         .mindmap-container {
             flex: 1;
@@ -279,7 +286,7 @@
             overflow: hidden;
             background: transparent;
             touch-action: none;
-            min-height: 0; /* Flex fix */
+            min-height: 0;
         }
 
         .mindmap-container svg {
@@ -307,7 +314,6 @@
             z-index: 2;
         }
 
-        /* Larger nodes for full‑screen */
         .mindmap-node {
             position: absolute;
             background: rgba(255, 255, 255, 0.06);
@@ -1107,7 +1113,6 @@
             .journal-actions { flex-wrap: wrap; }
         }
 
-        /* For very large screens, keep it full but readable */
         @media (min-width: 1200px) {
             .mindmap-node { font-size: 18px; padding: 16px 28px; max-width: 280px; border-radius: 24px; }
             .mindmap-node .add-child-btn { width: 34px; height: 34px; font-size: 20px; bottom: -14px; right: -14px; }
@@ -1247,7 +1252,6 @@
         <div class="scene-bg"></div>
         <div class="sun-ray"></div>
         <div class="sun-ray"></div>
-        <!-- leaves added by JS -->
         <div class="fs-scene-name">Forest Glade</div>
     </div>
     <!-- Cosmic -->
@@ -1334,7 +1338,8 @@
 
         function layoutTree(node, x, y, xSpacing, ySpacing) {
             if (!node) return;
-            node.x = x; node.y = y;
+            node.x = x;
+            node.y = y;
             const children = node.children || [];
             if (children.length === 0) return;
             const childWidths = children.map(c => computeWidth(c));
@@ -1361,6 +1366,14 @@
             layoutTree(mindmapData, centerX, startY, xSpacing, ySpacing);
             renderMindmap();
             saveMindmap();
+
+            // --- Visual feedback on the layout button ---
+            autoLayoutBtn.textContent = '✓ Done!';
+            autoLayoutBtn.classList.add('layout-active');
+            setTimeout(() => {
+                autoLayoutBtn.textContent = '⟳ Layout';
+                autoLayoutBtn.classList.remove('layout-active');
+            }, 1200);
         }
 
         // Render
@@ -1645,7 +1658,22 @@
         if (!loaded) renderMindmap();
 
         createBtn.addEventListener('click', createMindmap);
-        autoLayoutBtn.addEventListener('click', () => { if (mindmapData) { autoLayout(); saveMindmap(); } });
+
+        // --- LAYOUT BUTTON: now fully active with visual feedback ---
+        autoLayoutBtn.addEventListener('click', function() {
+            if (mindmapData) {
+                autoLayout();
+            } else {
+                // Brief feedback if no mindmap exists
+                this.textContent = '⚠ No map';
+                this.classList.add('layout-active');
+                setTimeout(() => {
+                    this.textContent = '⟳ Layout';
+                    this.classList.remove('layout-active');
+                }, 1000);
+            }
+        });
+
         clearBtn.addEventListener('click', clearMindmap);
         journalInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) createMindmap();
@@ -1659,7 +1687,6 @@
         let isAudioOn = false;
         let audioCtx = null;
         let audioNode = null;
-        let forestLeafInterval = null;
         let suggestionBanner = document.getElementById('suggestionBanner');
         let suggestionText = document.getElementById('suggestionText');
 
@@ -1910,7 +1937,7 @@
             });
         }
 
-        console.log('🌸 Yurika – Full‑screen Journal + Ambient. Enjoy your clarity and calm.');
+        console.log('🌸 Yurika – Full‑screen Journal + Ambient. Layout button activated!');
     })();
 </script>
 

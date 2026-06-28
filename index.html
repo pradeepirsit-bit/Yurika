@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Yurika · Anxiety Remover</title>
+    <title>Yurika · Mindmap Journal</title>
 
     <!-- PWA META TAGS -->
     <link rel="manifest" href="manifest.json" />
@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Yurika" />
     <meta name="theme-color" content="#0c0b14" />
-    <meta name="description" content="Anxiety remover with AI decision paths and immersive ambient views." />
+    <meta name="description" content="Mindmap journaling for clarity and calm." />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -150,32 +150,22 @@
         /* ----- MAIN CONTENT ----- */
         .tab-content {
             flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 16px 20px 10px 20px;
+            overflow: hidden;
             position: relative;
             z-index: 5;
-            scroll-behavior: smooth;
-        }
-
-        .tab-content::-webkit-scrollbar {
-            width: 3px;
-        }
-        .tab-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .tab-content::-webkit-scrollbar-thumb {
-            background: #3d3566;
-            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
         }
 
         .tab-pane {
             display: none;
+            flex-direction: column;
+            height: 100%;
             animation: fadeSlide 0.35s ease-out;
         }
 
         .tab-pane.active {
-            display: block;
+            display: flex;
         }
 
         @keyframes fadeSlide {
@@ -189,77 +179,80 @@
             }
         }
 
-        /* ----- TAB 1: PATHS ----- */
-        .input-area {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 18px 18px 20px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 24px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        /* ----- JOURNAL PANE ----- */
+        .journal-input-area {
+            padding: 16px 20px 8px 20px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .input-area label {
+        .journal-input-area label {
             display: block;
             font-size: 13px;
             font-weight: 500;
             color: #b4adcf;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: 0.3px;
         }
 
-        .input-area textarea {
-            width: 100%;
+        .journal-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .journal-input-area textarea {
+            flex: 1;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             font-family: 'Inter', sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             color: #e8e4f5;
             resize: vertical;
-            min-height: 80px;
-            max-height: 140px;
+            min-height: 50px;
+            max-height: 100px;
             transition: border 0.2s;
             outline: none;
             line-height: 1.5;
         }
 
-        .input-area textarea:focus {
+        .journal-input-area textarea:focus {
             border-color: #a78bfa;
             box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15);
         }
 
-        .input-area textarea::placeholder {
+        .journal-input-area textarea::placeholder {
             color: #5d567a;
             font-weight: 300;
         }
 
-        .input-actions {
+        .journal-actions {
             display: flex;
-            justify-content: flex-end;
-            margin-top: 14px;
-            gap: 12px;
+            flex-direction: column;
+            gap: 6px;
+            justify-content: center;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #7c65c9, #a78bfa);
             border: none;
-            padding: 10px 24px;
+            padding: 8px 16px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             color: #0c0b14;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 6px;
             cursor: pointer;
             transition: all 0.25s;
             box-shadow: 0 4px 20px rgba(167, 139, 250, 0.25);
             font-family: 'Inter', sans-serif;
             letter-spacing: 0.3px;
+            white-space: nowrap;
         }
 
         .btn-primary:hover {
@@ -275,342 +268,214 @@
             transform: none;
         }
 
-        /* Path Cards */
-        .paths-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding-bottom: 20px;
-        }
-
-        .path-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 18px 20px;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .path-card:hover {
+        .btn-secondary {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(167, 139, 250, 0.2);
-            transform: translateX(4px);
-        }
-
-        .path-card.hidden {
-            display: none;
-        }
-
-        .path-card.selected {
-            border-color: #a78bfa;
-            box-shadow: 0 0 30px rgba(167, 139, 250, 0.15), 0 4px 25px rgba(0, 0, 0, 0.3);
-            background: rgba(167, 139, 250, 0.06);
-            transform: scale(1.02);
-        }
-
-        .path-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .path-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .path-icon.blue {
-            background: rgba(72, 130, 255, 0.2);
-            color: #6d9bff;
-        }
-        .path-icon.green {
-            background: rgba(72, 255, 180, 0.15);
-            color: #5ee7b0;
-        }
-        .path-icon.purple {
-            background: rgba(167, 139, 250, 0.2);
-            color: #b79aff;
-        }
-
-        .path-title {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .path-desc {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #c9c3df;
-            margin-bottom: 12px;
-        }
-
-        .path-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            font-size: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px 14px;
-            border-radius: 14px;
-            margin-top: 4px;
-            margin-bottom: 16px;
-        }
-
-        .path-meta .benefit {
-            color: #6ee7b7;
-        }
-        .path-meta .risk {
-            color: #f7a08c;
-        }
-
-        .btn-select-path {
-            background: rgba(167, 139, 250, 0.15);
-            border: 1px solid rgba(167, 139, 250, 0.25);
-            color: #d4ccf0;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 500;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-select-path:hover {
-            background: #a78bfa;
-            color: #0c0b14;
-            border-color: #a78bfa;
-            box-shadow: 0 4px 20px rgba(167, 139, 250, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn-select-path:active {
-            transform: scale(0.95);
-        }
-
-        .sub-steps-container {
-            margin-top: 18px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 16px;
-        }
-
-        .sub-step-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 10px 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 14px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .sub-step-item:hover {
-            background: rgba(0, 0, 0, 0.35);
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .sub-step-item.done {
-            opacity: 0.6;
-        }
-        .sub-step-item.done .sub-step-text {
-            text-decoration: line-through;
-            color: #8a84a5;
-        }
-
-        .sub-step-circle {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid #5d567a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-top: 2px;
-            transition: all 0.3s;
-            font-size: 12px;
-            color: transparent;
-        }
-
-        .sub-step-item.done .sub-step-circle {
-            border-color: #6ee7b7;
-            background: #6ee7b7;
-            color: #0c0b14;
-        }
-
-        .sub-step-text {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4ccf0;
-            flex: 1;
-        }
-
-        .sub-step-number {
-            font-size: 11px;
-            font-weight: 600;
-            color: #5d567a;
-            margin-right: 4px;
-        }
-
-        .btn-back {
-            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #9a94b0;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 12px;
+            color: #b4adcf;
+            padding: 8px 16px;
+            border-radius: 40px;
             font-weight: 500;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: all 0.25s;
-            margin-top: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            white-space: nowrap;
         }
 
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.08);
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
             color: #e2e0f0;
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px 10px;
-            color: #6a6385;
-        }
-
-        .empty-state .big-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            opacity: 0.6;
-        }
-        .empty-state h3 {
-            font-weight: 400;
-            font-size: 16px;
-            color: #9a94b0;
-        }
-
-        /* ----- TAB 2: AMBIENT ----- */
-        .ambient-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-top: 4px;
-            padding-bottom: 10px;
-        }
-
-        .ambient-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            padding: 18px 10px 14px 10px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+        /* ----- MINDMAP VIEW ----- */
+        .mindmap-container {
+            flex: 1;
             position: relative;
             overflow: hidden;
+            background: transparent;
+            touch-action: none;
         }
 
-        .ambient-card:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(167, 139, 250, 0.2);
+        .mindmap-container svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .ambient-card .preview-scene {
-            width: 54px;
-            height: 54px;
+        .mindmap-container svg path {
+            stroke: rgba(255, 255, 255, 0.15);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .mindmap-nodes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .mindmap-node {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 10px 16px;
+            min-width: 60px;
+            max-width: 160px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #e2e0f0;
+            cursor: grab;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            user-select: none;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            touch-action: none;
+        }
+
+        .mindmap-node:hover {
+            border-color: rgba(167, 139, 250, 0.3);
+            box-shadow: 0 6px 30px rgba(167, 139, 250, 0.1);
+        }
+
+        .mindmap-node.dragging {
+            opacity: 0.8;
+            cursor: grabbing;
+            z-index: 100;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .mindmap-node .node-label {
+            pointer-events: none;
+        }
+
+        .mindmap-node .add-child-btn {
+            position: absolute;
+            bottom: -12px;
+            right: -12px;
+            width: 26px;
+            height: 26px;
+            background: rgba(167, 139, 250, 0.2);
+            border: 1px solid rgba(167, 139, 250, 0.3);
             border-radius: 50%;
-            margin-bottom: 4px;
+            color: #d4ccf0;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            pointer-events: auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
-            position: relative;
-        }
-
-        .ambient-card .preview-scene.cosmic {
-            background: radial-gradient(circle at 30% 30%, #2b1a4a, #0f0c1a);
-            box-shadow: 0 0 30px rgba(120, 80, 220, 0.2);
-        }
-        .ambient-card .preview-scene.rain {
-            background: linear-gradient(180deg, #1a2838, #0d1b2a);
-            box-shadow: 0 0 30px rgba(60, 130, 200, 0.15);
-        }
-        .ambient-card .preview-scene.zen {
-            background: radial-gradient(circle at 50% 80%, #2a3a2a, #0f1a0f);
-            box-shadow: 0 0 30px rgba(80, 200, 120, 0.1);
-        }
-        .ambient-card .preview-scene.fire {
-            background: radial-gradient(circle at 50% 60%, #4a2818, #1a0e08);
-            box-shadow: 0 0 30px rgba(220, 100, 40, 0.15);
-        }
-        .ambient-card .preview-scene.ocean {
-            background: linear-gradient(180deg, #1a3a5c, #2a1a1a);
-            box-shadow: 0 0 30px rgba(60, 150, 220, 0.2);
-        }
-        .ambient-card .preview-scene.forest {
-            background: radial-gradient(circle at 30% 40%, #2a4a2a, #0f1a0a);
-            box-shadow: 0 0 30px rgba(100, 200, 80, 0.15);
-        }
-        .ambient-card .preview-scene.aurora {
-            background: linear-gradient(180deg, #1a1a3a, #0a0a1a);
-            box-shadow: 0 0 30px rgba(130, 100, 255, 0.2);
-        }
-
-        .ambient-card .scene-label {
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .ambient-card .scene-sub {
-            font-size: 10px;
-            color: #7b7499;
             font-weight: 300;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .ambient-suggestion-banner {
-            background: rgba(167, 139, 250, 0.08);
-            border: 1px solid rgba(167, 139, 250, 0.15);
-            border-radius: 16px;
-            padding: 12px 16px;
-            margin-bottom: 18px;
+        .mindmap-node .add-child-btn:hover {
+            background: rgba(167, 139, 250, 0.4);
+            transform: scale(1.1);
+            border-color: #a78bfa;
+        }
+
+        .mindmap-node .edit-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #a78bfa;
+            border-radius: 8px;
+            color: #e2e0f0;
+            font-family: 'Inter', sans-serif;
             font-size: 13px;
-            color: #c9c3df;
+            padding: 4px 8px;
+            width: 100%;
+            outline: none;
+            text-align: center;
+        }
+
+        .mindmap-node .child-input-container {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+            background: rgba(20, 17, 34, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 6px;
             display: none;
-            align-items: center;
-            gap: 12px;
+            z-index: 200;
+            width: 140px;
         }
-        .ambient-suggestion-banner.show {
-            display: flex;
+
+        .mindmap-node .child-input-container.open {
+            display: block;
         }
-        .ambient-suggestion-banner strong {
-            color: #a78bfa;
+
+        .mindmap-node .child-input-container input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: #e2e0f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .mindmap-node .child-input-container input:focus {
+            border-color: #a78bfa;
+        }
+
+        .mindmap-node .child-input-container .btn-add {
+            margin-top: 4px;
+            background: #a78bfa;
+            border: none;
+            border-radius: 8px;
+            color: #0c0b14;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Empty state for mindmap */
+        .mindmap-empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #5d567a;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .mindmap-empty .big-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        .mindmap-empty h3 {
+            font-weight: 400;
+            font-size: 16px;
+            color: #7b7499;
         }
 
         /* ----- BOTTOM NAV ----- */
@@ -624,601 +489,42 @@
             flex-shrink: 0;
             position: relative;
             z-index: 20;
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding: 8px 0;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.25s;
-            border: none;
-            background: transparent;
-            color: #6a6385;
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-        }
-
-        .nav-item .nav-icon {
-            font-size: 22px;
-            transition: transform 0.2s;
-        }
-
-        .nav-item.active {
-            color: #e2e0f0;
-            background: rgba(167, 139, 250, 0.08);
-        }
-
-        .nav-item.active .nav-icon {
-            transform: translateY(-2px);
-        }
-
-        .nav-item:hover {
-            color: #c9c3df;
-        }
-
-        /* ----- FULLSCREEN OVERLAY ----- */
-        .fullscreen-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: #0a0812;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            overflow: hidden;
-        }
-        .fullscreen-overlay.open {
-            display: flex;
-            opacity: 1;
-        }
-        .fs-scene {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: opacity 0.8s ease;
-        }
-        .fs-scene.active {
-            display: flex;
-        }
-        .fs-scene .scene-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        /* --- Cosmic --- */
-        .fs-cosmic .scene-bg {
-            background: radial-gradient(ellipse at 40% 30%, #2b1a4a, #0a0715);
-            animation: cosmicDrift 20s ease-in-out infinite alternate;
-        }
-        @keyframes cosmicDrift {
-            0% {
-                transform: scale(1) rotate(0deg);
-                filter: hue-rotate(0deg);
-            }
-            100% {
-                transform: scale(1.2) rotate(5deg);
-                filter: hue-rotate(30deg);
-            }
-        }
-        .fs-cosmic .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, #d4bfff, transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 160px 120px, #b8a5ff, transparent),
-                radial-gradient(2px 2px at 200px 50px, #fff, transparent);
-            background-size: 200px 200px;
-            background-repeat: repeat;
-            opacity: 0.5;
-            animation: twinkle 4s ease-in-out infinite alternate;
-        }
-        @keyframes twinkle {
-            0% {
-                opacity: 0.3;
-            }
-            100% {
-                opacity: 0.8;
-            }
-        }
-
-        /* --- Rain --- */
-        .fs-rain .scene-bg {
-            background: linear-gradient(180deg, #111f2e, #0a121c);
-        }
-        .fs-rain .rain-drops {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(180, 210, 255, 0.05) 2px,
-                    rgba(180, 210, 255, 0.05) 4px);
-            background-size: 100% 10px;
-            animation: rainFall 0.8s linear infinite;
-            transform: rotate(10deg);
-        }
-        @keyframes rainFall {
-            0% {
-                transform: translateY(-10px) rotate(10deg);
-            }
-            100% {
-                transform: translateY(10px) rotate(10deg);
-            }
-        }
-        .fs-rain .rain-blur {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-        }
-
-        /* --- Zen --- */
-        .fs-zen .scene-bg {
-            background: radial-gradient(ellipse at 50% 90%, #1f3a1f, #0d180d);
-        }
-        .fs-zen .ripple-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-        }
-        .fs-zen .ripple {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 1px solid rgba(130, 220, 150, 0.3);
-            transform: translate(-50%, -50%) scale(0);
-            animation: rippleOut 4s ease-out infinite;
-        }
-        .fs-zen .ripple:nth-child(2) {
-            animation-delay: 1.5s;
-        }
-        .fs-zen .ripple:nth-child(3) {
-            animation-delay: 3s;
-        }
-        @keyframes rippleOut {
-            0% {
-                transform: translate(-50%, -50%) scale(0.2);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(4);
-                opacity: 0;
-            }
-        }
-        .fs-zen .center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 12px;
-            height: 12px;
-            background: rgba(130, 220, 150, 0.4);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 40px rgba(130, 220, 150, 0.2);
-        }
-
-        /* --- Fire --- */
-        .fs-fire .scene-bg {
-            background: radial-gradient(ellipse at 50% 70%, #2a140a, #0d0704);
-        }
-        .fs-fire .flame {
-            position: absolute;
-            bottom: 30%;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(ellipse at 50% 100%, #ff7b24, #ff3c00 40%, transparent 70%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: flicker 1.5s ease-in-out infinite alternate;
-            filter: blur(12px);
-            opacity: 0.6;
-        }
-        .fs-fire .flame.inner {
-            width: 70px;
-            height: 80px;
-            background: radial-gradient(ellipse at 50% 100%, #ffdd55, #ff8800 50%, transparent 70%);
-            animation-duration: 1.2s;
-            filter: blur(6px);
-            opacity: 0.8;
-        }
-        @keyframes flicker {
-            0% {
-                transform: scale(1) rotate(-2deg) translateY(0);
-            }
-            100% {
-                transform: scale(1.1) rotate(2deg) translateY(-8px);
-            }
-        }
-        .fs-fire .sparks {
-            position: absolute;
-            bottom: 40%;
-            width: 4px;
-            height: 4px;
-            background: #ffaa44;
-            border-radius: 50%;
-            box-shadow: 20px -30px 0px #ffcc66, -20px -50px 0px #ff9922, 40px -20px 0px #ffaa44, -40px -40px 0px #ffbb55;
-            animation: sparkle 3s ease-in-out infinite alternate;
-        }
-        @keyframes sparkle {
-            0% {
-                opacity: 0.2;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0.8;
-                transform: translateY(-20px);
-            }
-        }
-
-        /* --- Ocean Sunset --- */
-        .fs-ocean .scene-bg {
-            background: linear-gradient(180deg, #0b1a2e 0%, #1a3a5c 40%, #c67b4a 80%, #d4a05a 100%);
-        }
-        .fs-ocean .wave-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 200%;
-            height: 60%;
-            background: repeating-linear-gradient(90deg,
-                    rgba(40, 80, 140, 0.15) 0px,
-                    rgba(30, 60, 120, 0.25) 40px,
-                    rgba(40, 80, 140, 0.15) 80px);
-            border-radius: 50% 50% 0 0 / 30% 30% 0 0;
-            animation: waveMove 8s ease-in-out infinite alternate;
-            transform-origin: bottom;
-        }
-        .fs-ocean .wave-layer:nth-child(2) {
-            animation-duration: 12s;
-            animation-delay: -2s;
-            opacity: 0.6;
-            height: 50%;
-            background: repeating-linear-gradient(90deg,
-                    rgba(60, 120, 200, 0.1) 0px,
-                    rgba(40, 90, 160, 0.2) 50px,
-                    rgba(60, 120, 200, 0.1) 100px);
-        }
-        .fs-ocean .wave-layer:nth-child(3) {
-            animation-duration: 15s;
-            animation-delay: -4s;
-            opacity: 0.4;
-            height: 40%;
-            background: repeating-linear-gradient(90deg,
-                    rgba(80, 160, 220, 0.08) 0px,
-                    rgba(50, 110, 180, 0.15) 60px,
-                    rgba(80, 160, 220, 0.08) 120px);
-        }
-        @keyframes waveMove {
-            0% {
-                transform: translateX(0) scaleY(0.6);
-            }
-            100% {
-                transform: translateX(-50%) scaleY(1);
-            }
-        }
-        .fs-ocean .sun-glint {
-            position: absolute;
-            top: 25%;
-            right: 15%;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(255, 200, 100, 0.4), transparent 70%);
-            border-radius: 50%;
-            filter: blur(20px);
-            animation: pulseGlint 4s ease-in-out infinite alternate;
-        }
-        @keyframes pulseGlint {
-            0% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-
-        /* --- Forest Glade --- */
-        .fs-forest .scene-bg {
-            background: linear-gradient(180deg, #0d1f0d, #1a3a1a 50%, #2a4a1a 100%);
-        }
-        .fs-forest .sun-ray {
-            position: absolute;
-            top: -20%;
-            left: 10%;
-            width: 200%;
-            height: 120%;
-            background: linear-gradient(135deg, rgba(255, 230, 180, 0.08) 0%, transparent 40%, transparent 100%);
-            transform: rotate(25deg);
-            animation: rayMove 10s ease-in-out infinite alternate;
-        }
-        .fs-forest .sun-ray:nth-child(2) {
-            left: 40%;
-            transform: rotate(35deg);
-            animation-delay: -3s;
-            background: linear-gradient(135deg, rgba(255, 230, 180, 0.06) 0%, transparent 50%, transparent 100%);
-        }
-        @keyframes rayMove {
-            0% {
-                transform: rotate(20deg) scale(1);
-                opacity: 0.6;
-            }
-            100% {
-                transform: rotate(40deg) scale(1.1);
-                opacity: 1;
-            }
-        }
-        .fs-forest .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 230, 200, 0.4);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: floatParticle 12s ease-in-out infinite alternate;
-        }
-        .fs-forest .particle:nth-child(3) {
-            top: 30%;
-            left: 20%;
-            animation-duration: 15s;
-        }
-        .fs-forest .particle:nth-child(4) {
-            top: 60%;
-            left: 70%;
-            animation-duration: 10s;
-            animation-delay: -2s;
-            width: 6px;
-            height: 6px;
-        }
-        .fs-forest .particle:nth-child(5) {
-            top: 20%;
-            left: 80%;
-            animation-duration: 18s;
-            animation-delay: -5s;
-        }
-        .fs-forest .particle:nth-child(6) {
-            top: 70%;
-            left: 10%;
-            animation-duration: 14s;
-            animation-delay: -7s;
-            width: 3px;
-            height: 3px;
-        }
-        @keyframes floatParticle {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.2;
-            }
-            100% {
-                transform: translate(40px, -60px) scale(1.8);
-                opacity: 0.7;
-            }
-        }
-
-        /* --- Aurora Skies --- */
-        .fs-aurora .scene-bg {
-            background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3a 40%, #0a1a2a 100%);
-        }
-        .fs-aurora .aurora-curtain {
-            position: absolute;
-            top: 10%;
-            left: -10%;
-            width: 120%;
-            height: 50%;
-            background: linear-gradient(180deg,
-                    rgba(100, 200, 255, 0.0) 0%,
-                    rgba(80, 150, 255, 0.15) 20%,
-                    rgba(180, 100, 255, 0.2) 40%,
-                    rgba(50, 220, 180, 0.15) 60%,
-                    rgba(200, 150, 255, 0.1) 80%,
-                    transparent 100%);
-            filter: blur(30px);
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-            animation: auroraFlow 12s ease-in-out infinite alternate;
-            transform-origin: center;
-        }
-        .fs-aurora .aurora-curtain:nth-child(2) {
-            top: 25%;
-            left: -20%;
-            width: 140%;
-            height: 40%;
-            background: linear-gradient(180deg,
-                    rgba(255, 100, 200, 0.0) 0%,
-                    rgba(200, 80, 255, 0.15) 30%,
-                    rgba(100, 220, 255, 0.2) 60%,
-                    transparent 100%);
-            animation-duration: 16s;
-            animation-delay: -4s;
-            filter: blur(40px);
-        }
-        .fs-aurora .aurora-curtain:nth-child(3) {
-            top: 40%;
-            left: 5%;
-            width: 110%;
-            height: 30%;
-            background: linear-gradient(180deg,
-                    rgba(80, 255, 200, 0.0) 0%,
-                    rgba(150, 255, 180, 0.1) 40%,
-                    rgba(255, 200, 100, 0.1) 70%,
-                    transparent 100%);
-            animation-duration: 20s;
-            animation-delay: -8s;
-            filter: blur(50px);
-        }
-        @keyframes auroraFlow {
-            0% {
-                transform: translateX(0) scaleX(1) skewX(-5deg);
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateX(10%) scaleX(1.1) skewX(5deg);
-                opacity: 1;
-            }
-        }
-        .fs-aurora .snow-peak {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            background: linear-gradient(0deg, rgba(30, 40, 60, 0.6) 0%, transparent 100%);
-            clip-path: polygon(0% 60%, 20% 30%, 40% 50%, 60% 20%, 80% 45%, 100% 25%, 100% 100%, 0% 100%);
-        }
-
-        /* --- FS UI Controls --- */
-        .fs-controls {
-            position: absolute;
-            bottom: 40px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
-        }
-        .fullscreen-overlay:hover .fs-controls,
-        .fullscreen-overlay.touch-active .fs-controls {
-            opacity: 0.7;
-            pointer-events: auto;
-        }
-        .fs-controls button {
-            background: rgba(20, 17, 34, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #e2e0f0;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
             justify-content: center;
         }
-        .fs-controls button:hover {
-            background: rgba(167, 139, 250, 0.3);
-            transform: scale(1.05);
-        }
 
-        .fs-exit {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 15;
-            background: rgba(20, 17, 34, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #c9c3df;
-            padding: 10px 16px;
+        .bottom-nav .nav-item {
+            flex: 0 1 auto;
+            padding: 8px 24px;
             border-radius: 30px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.25s;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.15);
+            color: #c9c3df;
             font-family: 'Inter', sans-serif;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .fullscreen-overlay:hover .fs-exit,
-        .fullscreen-overlay.touch-active .fs-exit {
-            opacity: 0.6;
-            pointer-events: auto;
-        }
-        .fs-exit:hover {
-            opacity: 1 !important;
-            background: rgba(255, 70, 70, 0.2);
-            border-color: rgba(255, 70, 70, 0.3);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: default;
         }
 
-        .fs-scene-name {
-            position: absolute;
-            bottom: 100px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 14px;
-            font-weight: 300;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            z-index: 5;
-            pointer-events: none;
-        }
-        .fs-audio-hint {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.15);
-            font-size: 11px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 4px 16px;
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-            z-index: 5;
-            opacity: 0;
-            transition: opacity 1s;
-            pointer-events: none;
-        }
-        .fullscreen-overlay:hover .fs-audio-hint {
-            opacity: 0.6;
-        }
-
+        /* ----- RESPONSIVE ----- */
         @media (max-width: 400px) {
             .app-header {
                 padding: 16px 16px 4px 16px;
             }
-            .tab-content {
+            .journal-input-area {
                 padding: 12px 14px 6px 14px;
             }
-            .ambient-grid {
-                gap: 10px;
+            .journal-input-area textarea {
+                font-size: 13px;
+                min-height: 40px;
             }
-            .ambient-card {
-                min-height: 100px;
-                padding: 12px 6px;
+            .btn-primary {
+                font-size: 12px;
+                padding: 6px 12px;
             }
-            .ambient-card .preview-scene {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
-            }
-            .fs-zen .ripple-container {
-                width: 150px;
-                height: 150px;
+            .mindmap-node {
+                font-size: 12px;
+                padding: 8px 12px;
+                max-width: 120px;
             }
         }
 
@@ -1235,675 +541,568 @@
 </head>
 <body>
 
-    <div class="app-container" id="app">
+<div class="app-container" id="app">
 
-        <header class="app-header">
-            <div class="logo">
-                <div class="logo-icon">Y</div>
-                <h1>Yurika</h1>
-                <span>v3.0</span>
-            </div>
-            <div class="status-dot" title="Calm mode"></div>
-        </header>
-
-        <div class="tab-content" id="tabContent">
-
-            <!-- ========== TAB 1: DECISION PATHS ========== -->
-            <div class="tab-pane active" id="tabPaths">
-                <div class="input-area">
-                    <label for="problemInput">🌱 What's on your mind?</label>
-                    <textarea id="problemInput" placeholder="e.g., I can't decide between two job offers, and I'm feeling paralyzed." rows="3"></textarea>
-                    <div class="input-actions">
-                        <button class="btn-primary" id="generateBtn">✦ Generate Paths</button>
-                    </div>
-                </div>
-
-                <div id="pathsOutput">
-                    <div class="empty-state" id="emptyState">
-                        <div class="big-icon">🧘</div>
-                        <h3>Share your problem above.<br />Yurika will map out multiple paths.</h3>
-                    </div>
-                    <div class="paths-container" id="pathsContainer" style="display: none;"></div>
-                </div>
-            </div>
-
-            <!-- ========== TAB 2: AMBIENT VIEWS ========== -->
-            <div class="tab-pane" id="tabAmbient">
-                <div class="ambient-suggestion-banner" id="suggestionBanner">
-                    <span>💡</span>
-                    <span id="suggestionText">Based on your last input, <strong>Cosmic Drift</strong> might help clear your mind.</span>
-                </div>
-                <div class="ambient-grid" id="ambientGrid">
-                    <div class="ambient-card" data-scene="cosmic">
-                        <div class="preview-scene cosmic">🌌</div>
-                        <div class="scene-label">Cosmic Drift</div>
-                        <div class="scene-sub">Deep space, theta waves</div>
-                    </div>
-                    <div class="ambient-card" data-scene="rain">
-                        <div class="preview-scene rain">🌧️</div>
-                        <div class="scene-label">Rainy Window</div>
-                        <div class="scene-sub">Binaural rainfall</div>
-                    </div>
-                    <div class="ambient-card" data-scene="zen">
-                        <div class="preview-scene zen">🌀</div>
-                        <div class="scene-label">Zen Garden</div>
-                        <div class="scene-sub">Rippling water, koto</div>
-                    </div>
-                    <div class="ambient-card" data-scene="fire">
-                        <div class="preview-scene fire">🔥</div>
-                        <div class="scene-label">Campfire Hearth</div>
-                        <div class="scene-sub">Crackling warmth</div>
-                    </div>
-                    <div class="ambient-card" data-scene="ocean">
-                        <div class="preview-scene ocean">🌅</div>
-                        <div class="scene-label">Ocean Sunset</div>
-                        <div class="scene-sub">Gentle tides, dusk glow</div>
-                    </div>
-                    <div class="ambient-card" data-scene="forest">
-                        <div class="preview-scene forest">🌿</div>
-                        <div class="scene-label">Forest Glade</div>
-                        <div class="scene-sub">Sunbeams, floating light</div>
-                    </div>
-                    <div class="ambient-card" data-scene="aurora">
-                        <div class="preview-scene aurora">🌌</div>
-                        <div class="scene-label">Aurora Skies</div>
-                        <div class="scene-sub">Flowing light curtains</div>
-                    </div>
-                </div>
-                <div style="height: 10px;"></div>
-            </div>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="logo">
+            <div class="logo-icon">Y</div>
+            <h1>Yurika</h1>
+            <span>Journal</span>
         </div>
+        <div class="status-dot" title="Calm mode"></div>
+    </header>
 
-        <div class="bottom-nav">
-            <button class="nav-item active" data-tab="tabPaths">
-                <span class="nav-icon">🧭</span>
-                <span>Paths</span>
-            </button>
-            <button class="nav-item" data-tab="tabAmbient">
-                <span class="nav-icon">🌿</span>
-                <span>Ambient</span>
-            </button>
+    <!-- MAIN CONTENT -->
+    <div class="tab-content" id="tabContent">
+        <div class="tab-pane active" id="tabJournal">
+            <!-- Input area -->
+            <div class="journal-input-area">
+                <label for="journalInput">📝 Journal entry</label>
+                <div class="journal-input-row">
+                    <textarea id="journalInput" placeholder="Write your main thought or journal entry…" rows="2"></textarea>
+                    <div class="journal-actions">
+                        <button class="btn-primary" id="createMindmapBtn">✦ Create</button>
+                        <button class="btn-secondary" id="autoLayoutBtn">⟳ Layout</button>
+                        <button class="btn-secondary" id="clearBtn">✕ Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mindmap view -->
+            <div class="mindmap-container" id="mindmapContainer">
+                <svg id="mindmapSvg"></svg>
+                <div class="mindmap-nodes" id="mindmapNodes"></div>
+                <div class="mindmap-empty" id="mindmapEmpty">
+                    <div class="big-icon">🌱</div>
+                    <h3>Write a journal entry above<br />and click "Create" to start your mindmap.</h3>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ========== FULLSCREEN OVERLAY ========== -->
-    <div class="fullscreen-overlay" id="fsOverlay">
-        <div class="fs-scene fs-cosmic active" data-scene="cosmic">
-            <div class="scene-bg"></div>
-            <div class="stars"></div>
-            <div class="fs-scene-name">Cosmic Drift</div>
-        </div>
-        <div class="fs-scene fs-rain" data-scene="rain">
-            <div class="scene-bg"></div>
-            <div class="rain-blur"></div>
-            <div class="rain-drops"></div>
-            <div class="fs-scene-name">Rainy Window</div>
-        </div>
-        <div class="fs-scene fs-zen" data-scene="zen">
-            <div class="scene-bg"></div>
-            <div class="ripple-container">
-                <div class="ripple"></div>
-                <div class="ripple"></div>
-                <div class="ripple"></div>
-                <div class="center-dot"></div>
-            </div>
-            <div class="fs-scene-name">Zen Garden</div>
-        </div>
-        <div class="fs-scene fs-fire" data-scene="fire">
-            <div class="scene-bg"></div>
-            <div class="flame"></div>
-            <div class="flame inner"></div>
-            <div class="sparks"></div>
-            <div class="fs-scene-name">Campfire Hearth</div>
-        </div>
-        <div class="fs-scene fs-ocean" data-scene="ocean">
-            <div class="scene-bg"></div>
-            <div class="wave-layer"></div>
-            <div class="wave-layer"></div>
-            <div class="wave-layer"></div>
-            <div class="sun-glint"></div>
-            <div class="fs-scene-name">Ocean Sunset</div>
-        </div>
-        <div class="fs-scene fs-forest" data-scene="forest">
-            <div class="scene-bg"></div>
-            <div class="sun-ray"></div>
-            <div class="sun-ray"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="fs-scene-name">Forest Glade</div>
-        </div>
-        <div class="fs-scene fs-aurora" data-scene="aurora">
-            <div class="scene-bg"></div>
-            <div class="aurora-curtain"></div>
-            <div class="aurora-curtain"></div>
-            <div class="aurora-curtain"></div>
-            <div class="snow-peak"></div>
-            <div class="fs-scene-name">Aurora Skies</div>
-        </div>
-
-        <button class="fs-exit" id="fsExit">✕ Close</button>
-        <div class="fs-controls">
-            <button id="fsPrev">←</button>
-            <button id="fsNext">→</button>
-        </div>
-        <div class="fs-audio-hint">🎵 Double-tap to toggle audio (simulated)</div>
+    <!-- BOTTOM NAV (single tab) -->
+    <div class="bottom-nav">
+        <div class="nav-item">🧭 Journal</div>
     </div>
+</div>
 
-    <script>
-        (function() {
-            'use strict';
+<script>
+    (function() {
+        'use strict';
 
-            // ============================================================
-            // 1. GEMINI API CONFIGURATION – PASTE YOUR KEY HERE
-            // ============================================================
-            const GEMINI_API_KEY = 'AQ.Ab8RN6K65Qe-DP9sEFsoJ48OKMsqDLtiLlu_DwN99qgqxmMVsg'; // <-- Paste your key here
-            const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_API_KEY;
+        // ============================================================
+        // 1. MINDMAP DATA MODEL
+        // ============================================================
+        let nextId = 1;
+        let mindmapData = null; // root node { id, text, children, x, y }
 
-            // ----- DOM refs -----
-            const tabs = document.querySelectorAll('.nav-item');
-            const panes = {
-                paths: document.getElementById('tabPaths'),
-                ambient: document.getElementById('tabAmbient')
-            };
-            const generateBtn = document.getElementById('generateBtn');
-            const problemInput = document.getElementById('problemInput');
-            const pathsContainer = document.getElementById('pathsContainer');
-            const emptyState = document.getElementById('emptyState');
-            const suggestionBanner = document.getElementById('suggestionBanner');
-            const suggestionText = document.getElementById('suggestionText');
+        // DOM refs
+        const journalInput = document.getElementById('journalInput');
+        const createBtn = document.getElementById('createMindmapBtn');
+        const autoLayoutBtn = document.getElementById('autoLayoutBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const mindmapNodes = document.getElementById('mindmapNodes');
+        const mindmapSvg = document.getElementById('mindmapSvg');
+        const mindmapEmpty = document.getElementById('mindmapEmpty');
 
-            // Fullscreen
-            const fsOverlay = document.getElementById('fsOverlay');
-            const fsExit = document.getElementById('fsExit');
-            const fsPrev = document.getElementById('fsPrev');
-            const fsNext = document.getElementById('fsNext');
-            const fsScenes = document.querySelectorAll('.fs-scene');
-            const ambientCards = document.querySelectorAll('.ambient-card');
-            let currentSceneIndex = 0;
-            const sceneKeys = ['cosmic', 'rain', 'zen', 'fire', 'ocean', 'forest', 'aurora'];
-            let isAudioOn = false;
+        // Drag state
+        let dragNode = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        let dragStartX = 0;
+        let dragStartY = 0;
 
-            // ----- STATE FOR PATHS -----
-            let cachedPaths = [];
-            let selectedPathIndex = null;
+        // Active child input
+        let activeChildInput = null; // node element
 
-            // ============================================================
-            // 2. MOCK DATA (FALLBACK IF API FAILS)
-            // ============================================================
-            const mockPaths = {
-                job: [
-                    { title: 'The Stability Path', icon: '🛡️', desc: 'Choose the established company with a higher base salary. Focus on long-term security and structured growth.',
-                        benefit: 'Financial safety, clear promotion ladder.', risk: 'Less creative freedom, slower pace.' },
-                    { title: 'The Growth Path', icon: '🚀', desc: 'Choose the startup with equity and a dynamic role. Embrace the hustle for accelerated learning.',
-                        benefit: 'Rapid skill acquisition, high upside.', risk: 'Volatility, longer hours, less structure.' },
-                    { title: 'The Bridge Path', icon: '🌉', desc: 'Negotiate a freelance/part-time role with one while exploring the other. Keep both doors open.',
-                        benefit: 'Flexibility, diversified income.', risk: 'Burnout, lack of full commitment.' }
-                ],
-                relationship: [
-                    { title: 'The Honest Dialogue', icon: '💬', desc: 'Initiate a calm, vulnerable conversation. State your feelings without blame, using "I" statements.',
-                        benefit: 'Deepens intimacy, clears misunderstandings.', risk: 'Temporary discomfort, vulnerability hangover.' },
-                    { title: 'The Space Approach', icon: '🌊', desc: 'Step back and focus on self-care for 2 weeks. Let emotions settle before making a big decision.',
-                        benefit: 'Clarity, reduced reactivity.', risk: 'Might feel like avoidance, prolongs uncertainty.' },
-                    { title: 'The External View', icon: '🔍', desc: 'Write down the situation as if a friend told you about it. What advice would you give them?',
-                        benefit: 'Objectivity, reduces emotional bias.', risk: 'Can feel detached if not paired with empathy.' }
-                ],
-                health: [
-                    { title: 'The Professional Route', icon: '👨‍⚕️', desc: 'Book a specialist appointment immediately. Follow a structured medical plan.',
-                        benefit: 'Evidence-based, peace of mind.', risk: 'Can be expensive, anxiety around waiting for results.' },
-                    { title: 'The Holistic Reset', icon: '🌱', desc: 'Focus on sleep, hydration, and gentle movement for 7 days. Track how you feel.',
-                        benefit: 'Empowering, no side effects.', risk: 'May delay necessary treatment if severe.' },
-                    { title: 'The Community Path', icon: '🤝', desc: 'Join a support group (online or local). Share experiences and learn from others.',
-                        benefit: 'Reduces isolation, practical tips.', risk: 'Overwhelmed by others\' stories, not professional advice.' }
-                ]
-            };
-
-            function getMockPaths(input) {
-                const lower = input.toLowerCase();
-                if (lower.includes('job') || lower.includes('work') || lower.includes('career') || lower.includes('offer'))
-                    return mockPaths.job;
-                if (lower.includes('relationship') || lower.includes('partner') || lower.includes('love') || lower.includes(
-                        'girlfriend') || lower.includes('boyfriend')) return mockPaths.relationship;
-                if (lower.includes('health') || lower.includes('sick') || lower.includes('pain') || lower.includes('doctor'))
-                    return mockPaths.health;
-                return [
-                    { title: 'The Action Path', icon: '⚡', desc: 'Take one small, immediate step right now. Momentum beats overthinking.',
-                        benefit: 'Builds confidence, breaks paralysis.', risk: 'Might not solve the root issue.' },
-                    { title: 'The Reflection Path', icon: '📓', desc: 'Journal your thoughts for 15 minutes daily. Patterns will emerge.',
-                        benefit: 'Deep self-awareness.', risk: 'Can spiral into rumination without guidance.' },
-                    { title: 'The Rest Path', icon: '😴', desc: 'Do nothing consciously for 24 hours. Give your nervous system a break.',
-                        benefit: 'Restores clarity, reduces cortisol.', risk: 'Avoidance if used excessively.' }
-                ];
+        // ============================================================
+        // 2. PERSISTENCE (localStorage)
+        // ============================================================
+        function saveMindmap() {
+            if (mindmapData) {
+                localStorage.setItem('yurika_journal_mindmap', JSON.stringify(mindmapData));
+                localStorage.setItem('yurika_journal_nextId', String(nextId));
             }
+        }
 
-            function getMockSubSteps(path, problem) {
-                const steps = [];
-                const base = path.title.toLowerCase();
-                if (base.includes('stability') || base.includes('professional')) {
-                    steps.push('Research the key facts: gather all hard data (numbers, dates, contracts).');
-                    steps.push('List your top 3 non-negotiables for peace of mind.');
-                    steps.push('Schedule a 15-min call with someone who has experience in this area.');
-                    steps.push('Create a simple 1-page pros/cons sheet. Sleep on it.');
-                } else if (base.includes('growth') || base.includes('action')) {
-                    steps.push('Identify the single biggest risk and brainstorm 2 ways to mitigate it.');
-                    steps.push('Write down what success looks like in 6 months if you take this path.');
-                    steps.push('Take one tiny step TODAY (under 5 minutes) to test the waters.');
-                    steps.push('Set a reminder to review your progress in 1 week.');
-                } else if (base.includes('bridge') || base.includes('space') || base.includes('rest')) {
-                    steps.push('Define clear boundaries: what are you saying "no" to right now?');
-                    steps.push('Plan a specific "check-in" time (e.g., 3 days from now) to re-evaluate.');
-                    steps.push('Focus on one grounding activity today (walk, breathwork, music).');
-                    steps.push('Write a short letter to your future self about why you chose this pause.');
-                } else if (base.includes('honest') || base.includes('dialogue') || base.includes('external')) {
-                    steps.push('Write down what you want to say. Read it aloud to yourself.');
-                    steps.push('Choose a neutral, calm time and place for the conversation.');
-                    steps.push('Prepare 2 open-ended questions to ask the other person.');
-                    steps.push('After the talk, journal for 5 minutes to process your feelings.');
-                } else {
-                    steps.push('Take 5 deep breaths. Ground yourself in the present moment.');
-                    steps.push('Break this decision into 3 smaller sub-decisions.');
-                    steps.push('Visualize the best-case outcome and the worst-case outcome.');
-                    steps.push('Choose one small action to take within the next 2 hours.');
-                }
-                while (steps.length < 4) {
-                    steps.push('Simply observe your thoughts for 2 minutes. No judgment.');
-                }
-                return steps.slice(0, 4);
-            }
-
-            // ============================================================
-            // 3. GEMINI API: GENERATE PATHS
-            // ============================================================
-            async function generatePathsWithGemini(problem) {
-                // Disable button while loading
-                generateBtn.disabled = true;
-                generateBtn.innerHTML = '✦ Thinking...';
-
+        function loadMindmap() {
+            const saved = localStorage.getItem('yurika_journal_mindmap');
+            if (saved) {
                 try {
-                    const prompt = `
-You are Yurika, a calm and supportive AI guide designed to help people with anxiety.
-Your task is to help the user explore multiple solutions to their problem.
-
-The user's problem is: "${problem}"
-
-Generate exactly 3 distinct, actionable paths or solutions for this problem.
-For each path, provide:
-- A creative and descriptive title (max 5 words).
-- A single emoji that represents the path.
-- A clear, concise description of the path (1-2 sentences).
-- A key benefit (short phrase).
-- A potential risk or challenge to be aware of (short phrase).
-
-Format your response as a valid JSON array. Do not include any other text or markdown formatting outside the JSON.
-The JSON should have this exact structure:
-[
-  {
-    "title": "The Example Path",
-    "icon": "🚀",
-    "desc": "This is a clear description of the path.",
-    "benefit": "A key benefit of this path.",
-    "risk": "A potential risk of this path."
-  }
-]
-`;
-
-                    const response = await fetch(GEMINI_API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{ text: prompt }]
-                            }]
-                        })
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`Gemini API error: ${errorData.error?.message || response.status}`);
-                    }
-
-                    const data = await response.json();
-                    const generatedText = data.candidates[0].content.parts[0].text;
-
-                    // Parse the JSON (clean up any markdown wrapping)
-                    const jsonMatch = generatedText.match(/\[[\s\S]*\]/);
-                    if (!jsonMatch) {
-                        throw new Error('Could not parse Gemini response as JSON.');
-                    }
-                    const paths = JSON.parse(jsonMatch[0]);
-
-                    // Ensure we have exactly 3 paths, pad if needed
-                    while (paths.length < 3) {
-                        paths.push({
-                            title: "The Thoughtful Path",
-                            icon: "🧘",
-                            desc: "Take a moment to breathe and reflect on what feels right for you.",
-                            benefit: "Clarity and peace of mind.",
-                            risk: "Might take a little more time."
-                        });
-                    }
-                    return paths;
-
-                } catch (error) {
-                    console.error('Error calling Gemini API:', error);
-                    // Show a gentle error message (only once)
-                    if (!window._geminiErrorShown) {
-                        alert('Could not reach the AI. Using offline suggestions. Please check your API key and internet connection.');
-                        window._geminiErrorShown = true;
-                    }
-                    return getMockPaths(problem);
-                } finally {
-                    generateBtn.disabled = false;
-                    generateBtn.innerHTML = '✦ Generate Paths';
+                    mindmapData = JSON.parse(saved);
+                    nextId = parseInt(localStorage.getItem('yurika_journal_nextId')) || 1;
+                    renderMindmap();
+                    return true;
+                } catch (e) {
+                    console.warn('Failed to load saved mindmap', e);
                 }
             }
+            return false;
+        }
 
-            // ============================================================
-            // 4. RENDER PATHS (unchanged)
-            // ============================================================
-            function renderPaths(paths, selectedIdx = null) {
-                emptyState.style.display = 'none';
-                pathsContainer.style.display = 'flex';
-                pathsContainer.innerHTML = '';
-                const icons = ['blue', 'green', 'purple'];
-                if (selectedIdx === null) {
-                    paths.forEach((p, i) => {
-                        const card = createPathCard(p, i, icons[i % icons.length], false);
-                        pathsContainer.appendChild(card);
-                    });
-                } else {
-                    const p = paths[selectedIdx];
-                    const card = createPathCard(p, selectedIdx, icons[selectedIdx % icons.length], true);
-                    pathsContainer.appendChild(card);
-                }
+        // ============================================================
+        // 3. LAYOUT ENGINE (simple tree)
+        // ============================================================
+        function computeWidth(node) {
+            if (!node || !node.children || node.children.length === 0) return 1;
+            let sum = 0;
+            for (let child of node.children) {
+                sum += computeWidth(child);
             }
+            return sum;
+        }
 
-            function createPathCard(path, index, iconClass, isSelected) {
-                const card = document.createElement('div');
-                card.className = `path-card ${isSelected ? 'selected' : ''}`;
-                card.dataset.index = index;
+        function layoutTree(node, x, y, xSpacing, ySpacing) {
+            if (!node) return;
+            node.x = x;
+            node.y = y;
 
-                let subStepsHTML = '';
-                if (isSelected) {
-                    const steps = getMockSubSteps(path, problemInput.value || 'decision');
-                    subStepsHTML = `
-                        <div class="sub-steps-container">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                                <span style="font-size:13px; font-weight:500; color:#b4adcf;">📋 Action Steps</span>
-                                <button class="btn-back" id="backToOverview">← Back to all paths</button>
-                            </div>
-                            ${steps.map((step, si) => `
-                                <div class="sub-step-item" data-step="${si}">
-                                    <div class="sub-step-circle">✓</div>
-                                    <div class="sub-step-text"><span class="sub-step-number">Step ${si+1}.</span> ${step}</div>
-                                </div>
-                            `).join('')}
+            const children = node.children || [];
+            if (children.length === 0) return;
+
+            // Compute total width of children
+            const childWidths = children.map(c => computeWidth(c));
+            const totalWidth = childWidths.reduce((a, b) => a + b, 0);
+            const spacing = xSpacing;
+            // Start x offset from left
+            let currentX = x - (totalWidth * spacing) / 2 + spacing / 2;
+
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                const childWidth = childWidths[i];
+                const childX = currentX + (childWidth - 1) * spacing / 2;
+                layoutTree(child, childX, y + ySpacing, spacing, ySpacing);
+                currentX += childWidth * spacing;
+            }
+        }
+
+        function autoLayout() {
+            if (!mindmapData) return;
+            const container = document.getElementById('mindmapContainer');
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const startY = 60;
+            const xSpacing = 200;
+            const ySpacing = 150;
+            layoutTree(mindmapData, centerX, startY, xSpacing, ySpacing);
+            renderMindmap();
+            saveMindmap();
+        }
+
+        // ============================================================
+        // 4. RENDER MINDMAP (nodes + lines)
+        // ============================================================
+        function renderMindmap() {
+            if (!mindmapData) {
+                mindmapNodes.innerHTML = '';
+                mindmapSvg.innerHTML = '';
+                mindmapEmpty.style.display = 'block';
+                return;
+            }
+            mindmapEmpty.style.display = 'none';
+
+            // Build nodes HTML
+            let html = '';
+            let lines = [];
+
+            function traverse(node, parentId) {
+                if (!node) return;
+                // Node div
+                const left = node.x - 60; // approximate center offset
+                const top = node.y - 20;
+                html += `
+                    <div class="mindmap-node" id="node-${node.id}" style="left:${left}px; top:${top}px;"
+                         data-id="${node.id}">
+                        <span class="node-label">${escapeHtml(node.text)}</span>
+                        <div class="add-child-btn" data-id="${node.id}">+</div>
+                        <div class="child-input-container" id="childInput-${node.id}">
+                            <input type="text" placeholder="Branch title…" />
+                            <button class="btn-add" data-id="${node.id}">Add</button>
                         </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div class="path-header">
-                        <div class="path-icon ${iconClass}">${path.icon}</div>
-                        <span class="path-title">${path.title}</span>
                     </div>
-                    <div class="path-desc">${path.desc}</div>
-                    <div class="path-meta">
-                        <span class="benefit">✓ ${path.benefit}</span>
-                        <span class="risk">⚠ ${path.risk}</span>
-                    </div>
-                    ${!isSelected ? `<button class="btn-select-path" data-index="${index}">→ Select this path</button>` : ''}
-                    ${subStepsHTML}
                 `;
-
-                if (isSelected) {
-                    card.querySelectorAll('.sub-step-item').forEach(item => {
-                        item.addEventListener('click', function(e) {
-                            if (e.target.closest('.btn-back')) return;
-                            this.classList.toggle('done');
-                            this.style.transition = 'transform 0.1s';
-                            this.style.transform = 'scale(0.96)';
-                            setTimeout(() => { this.style.transform = 'scale(1)'; }, 100);
-                        });
-                    });
-                    const backBtn = card.querySelector('#backToOverview');
-                    if (backBtn) {
-                        backBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            selectedPathIndex = null;
-                            renderPaths(cachedPaths, null);
-                        });
+                if (parentId !== null) {
+                    lines.push({ from: parentId, to: node.id });
+                }
+                if (node.children) {
+                    for (let child of node.children) {
+                        traverse(child, node.id);
                     }
                 }
-
-                const selectBtn = card.querySelector('.btn-select-path');
-                if (selectBtn) {
-                    selectBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const idx = parseInt(this.dataset.index);
-                        selectedPathIndex = idx;
-                        renderPaths(cachedPaths, idx);
-                        pathsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    });
-                }
-                return card;
             }
 
-            // ============================================================
-            // 5. GENERATE BUTTON – now calls Gemini
-            // ============================================================
-            generateBtn.addEventListener('click', async function() {
-                const text = problemInput.value.trim();
-                if (!text) {
-                    problemInput.placeholder = 'Please describe your problem first...';
-                    problemInput.style.borderColor = '#f7a08c';
-                    setTimeout(() => { problemInput.style.borderColor = ''; }, 1500);
-                    return;
-                }
+            traverse(mindmapData, null);
+            mindmapNodes.innerHTML = html;
 
-                // Call Gemini (or fallback)
-                const paths = await generatePathsWithGemini(text);
-                cachedPaths = paths;
-                selectedPathIndex = null;
-                renderPaths(paths, null);
-                suggestAmbient(text);
-                document.querySelector('.nav-item[data-tab="tabPaths"]').click();
+            // Draw lines
+            let svgContent = '';
+            for (let line of lines) {
+                const fromNode = findNodeById(mindmapData, line.from);
+                const toNode = findNodeById(mindmapData, line.to);
+                if (fromNode && toNode) {
+                    const x1 = fromNode.x;
+                    const y1 = fromNode.y;
+                    const x2 = toNode.x;
+                    const y2 = toNode.y;
+                    svgContent += `<path d="M${x1},${y1} L${x2},${y2}" />`;
+                }
+            }
+            mindmapSvg.innerHTML = svgContent;
+
+            // Attach event listeners after DOM update
+            attachNodeEvents();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function findNodeById(node, id) {
+            if (!node) return null;
+            if (node.id === id) return node;
+            if (node.children) {
+                for (let child of node.children) {
+                    const found = findNodeById(child, id);
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
+        // ============================================================
+        // 5. EVENT HANDLING FOR NODES
+        // ============================================================
+        function attachNodeEvents() {
+            // Add child button
+            document.querySelectorAll('.add-child-btn').forEach(btn => {
+                btn.removeEventListener('click', onAddChildClick);
+                btn.addEventListener('click', onAddChildClick);
             });
 
-            problemInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                    generateBtn.click();
-                }
+            // Add button inside child input
+            document.querySelectorAll('.btn-add').forEach(btn => {
+                btn.removeEventListener('click', onAddChildConfirm);
+                btn.addEventListener('click', onAddChildConfirm);
             });
 
-            // ============================================================
-            // 6. SUGGEST AMBIENT (based on input)
-            // ============================================================
-            function suggestAmbient(input) {
-                const lower = input.toLowerCase();
-                let scene = 'cosmic';
-                let label = 'Cosmic Drift';
-                if (lower.includes('job') || lower.includes('work') || lower.includes('career')) {
-                    scene = 'fire';
-                    label = 'Campfire Hearth';
-                } else if (lower.includes('relationship') || lower.includes('love') || lower.includes('partner')) {
-                    scene = 'zen';
-                    label = 'Zen Garden';
-                } else if (lower.includes('health') || lower.includes('pain') || lower.includes('sick') || lower.includes(
-                    'doctor')) {
-                    scene = 'rain';
-                    label = 'Rainy Window';
-                } else if (lower.includes('ocean') || lower.includes('sea') || lower.includes('water') || lower.includes(
-                    'tide')) {
-                    scene = 'ocean';
-                    label = 'Ocean Sunset';
-                } else if (lower.includes('forest') || lower.includes('tree') || lower.includes('nature') || lower.includes(
-                    'green')) {
-                    scene = 'forest';
-                    label = 'Forest Glade';
-                } else if (lower.includes('sky') || lower.includes('aurora') || lower.includes('night') || lower.includes(
-                    'northern')) {
-                    scene = 'aurora';
-                    label = 'Aurora Skies';
+            // Input fields for child – press Enter to confirm
+            document.querySelectorAll('.child-input-container input').forEach(inp => {
+                inp.removeEventListener('keydown', onChildInputKeydown);
+                inp.addEventListener('keydown', onChildInputKeydown);
+            });
+
+            // Node drag
+            document.querySelectorAll('.mindmap-node').forEach(nodeEl => {
+                nodeEl.removeEventListener('mousedown', onNodeMouseDown);
+                nodeEl.removeEventListener('touchstart', onNodeTouchStart);
+                nodeEl.addEventListener('mousedown', onNodeMouseDown);
+                nodeEl.addEventListener('touchstart', onNodeTouchStart);
+                // Double-click to edit
+                nodeEl.removeEventListener('dblclick', onNodeDblClick);
+                nodeEl.addEventListener('dblclick', onNodeDblClick);
+            });
+        }
+
+        // ----- Add child -----
+        function onAddChildClick(e) {
+            e.stopPropagation();
+            const id = parseInt(this.dataset.id);
+            const container = document.getElementById(`childInput-${id}`);
+            if (!container) return;
+            // Close any other open child inputs
+            document.querySelectorAll('.child-input-container.open').forEach(el => {
+                if (el.id !== container.id) el.classList.remove('open');
+            });
+            container.classList.toggle('open');
+            if (container.classList.contains('open')) {
+                const input = container.querySelector('input');
+                if (input) {
+                    input.value = '';
+                    input.focus();
                 }
-                suggestionText.innerHTML = `Based on your input, <strong>${label}</strong> might help ground your energy.`;
-                suggestionBanner.classList.add('show');
-                ambientCards.forEach(c => {
-                    c.style.borderColor = 'rgba(255,255,255,0.05)';
-                    c.style.boxShadow = 'none';
-                });
-                ambientCards.forEach(c => {
-                    if (c.dataset.scene === scene) {
-                        c.style.borderColor = 'rgba(167, 139, 250, 0.4)';
-                        c.style.boxShadow = '0 0 30px rgba(167, 139, 250, 0.1)';
+            }
+        }
+
+        function onAddChildConfirm(e) {
+            e.stopPropagation();
+            const id = parseInt(this.dataset.id);
+            const container = document.getElementById(`childInput-${id}`);
+            if (!container) return;
+            const input = container.querySelector('input');
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+            // Add child to data
+            const parent = findNodeById(mindmapData, id);
+            if (!parent) return;
+            if (!parent.children) parent.children = [];
+            const newChild = {
+                id: nextId++,
+                text: text,
+                children: [],
+                x: parent.x + 100,
+                y: parent.y + 150
+            };
+            parent.children.push(newChild);
+            // Close input
+            container.classList.remove('open');
+            // Auto-layout for better placement
+            autoLayout();
+            saveMindmap();
+            renderMindmap();
+        }
+
+        function onChildInputKeydown(e) {
+            if (e.key === 'Enter') {
+                const btn = this.closest('.child-input-container').querySelector('.btn-add');
+                if (btn) btn.click();
+            }
+            if (e.key === 'Escape') {
+                this.closest('.child-input-container').classList.remove('open');
+            }
+        }
+
+        // ----- Edit node (double-click) -----
+        function onNodeDblClick(e) {
+            const nodeEl = this;
+            const id = parseInt(nodeEl.dataset.id);
+            const nodeData = findNodeById(mindmapData, id);
+            if (!nodeData) return;
+            // Replace label with input
+            const labelSpan = nodeEl.querySelector('.node-label');
+            const currentText = nodeData.text;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'edit-input';
+            input.value = currentText;
+            labelSpan.replaceWith(input);
+            input.focus();
+            input.select();
+
+            const finishEdit = () => {
+                const newText = input.value.trim() || currentText;
+                nodeData.text = newText;
+                renderMindmap();
+                saveMindmap();
+            };
+
+            input.addEventListener('blur', finishEdit);
+            input.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter') {
+                    input.blur();
+                }
+                if (ev.key === 'Escape') {
+                    input.value = currentText;
+                    input.blur();
+                }
+            });
+        }
+
+        // ----- Drag (mouse) -----
+        function onNodeMouseDown(e) {
+            if (e.target.closest('.add-child-btn') || e.target.closest('.child-input-container')) return;
+            if (e.target.closest('.edit-input')) return;
+            e.preventDefault();
+            const nodeEl = this;
+            const id = parseInt(nodeEl.dataset.id);
+            const nodeData = findNodeById(mindmapData, id);
+            if (!nodeData) return;
+            const rect = nodeEl.getBoundingClientRect();
+            const containerRect = document.getElementById('mindmapContainer').getBoundingClientRect();
+            dragNode = { el: nodeEl, data: nodeData };
+            dragOffsetX = e.clientX - rect.left;
+            dragOffsetY = e.clientY - rect.top;
+            dragStartX = nodeData.x;
+            dragStartY = nodeData.y;
+            nodeEl.classList.add('dragging');
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (!dragNode) return;
+            const containerRect = document.getElementById('mindmapContainer').getBoundingClientRect();
+            const newX = e.clientX - containerRect.left - dragOffsetX + 60; // adjust for node width/2
+            const newY = e.clientY - containerRect.top - dragOffsetY + 20;
+            dragNode.data.x = newX;
+            dragNode.data.y = newY;
+            // Update position visually
+            dragNode.el.style.left = (newX - 60) + 'px';
+            dragNode.el.style.top = (newY - 20) + 'px';
+            // Update lines
+            renderLines();
+        }
+
+        function onMouseUp(e) {
+            if (dragNode) {
+                dragNode.el.classList.remove('dragging');
+                dragNode = null;
+                saveMindmap();
+                renderLines();
+            }
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        // ----- Drag (touch) -----
+        function onNodeTouchStart(e) {
+            if (e.target.closest('.add-child-btn') || e.target.closest('.child-input-container')) return;
+            if (e.target.closest('.edit-input')) return;
+            const touch = e.touches[0];
+            if (!touch) return;
+            const nodeEl = this;
+            const id = parseInt(nodeEl.dataset.id);
+            const nodeData = findNodeById(mindmapData, id);
+            if (!nodeData) return;
+            const rect = nodeEl.getBoundingClientRect();
+            const containerRect = document.getElementById('mindmapContainer').getBoundingClientRect();
+            dragNode = { el: nodeEl, data: nodeData };
+            dragOffsetX = touch.clientX - rect.left;
+            dragOffsetY = touch.clientY - rect.top;
+            nodeEl.classList.add('dragging');
+
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+            document.addEventListener('touchend', onTouchEnd, { passive: false });
+            document.addEventListener('touchcancel', onTouchEnd, { passive: false });
+        }
+
+        function onTouchMove(e) {
+            e.preventDefault();
+            if (!dragNode) return;
+            const touch = e.touches[0];
+            if (!touch) return;
+            const containerRect = document.getElementById('mindmapContainer').getBoundingClientRect();
+            const newX = touch.clientX - containerRect.left - dragOffsetX + 60;
+            const newY = touch.clientY - containerRect.top - dragOffsetY + 20;
+            dragNode.data.x = newX;
+            dragNode.data.y = newY;
+            dragNode.el.style.left = (newX - 60) + 'px';
+            dragNode.el.style.top = (newY - 20) + 'px';
+            renderLines();
+        }
+
+        function onTouchEnd(e) {
+            if (dragNode) {
+                dragNode.el.classList.remove('dragging');
+                dragNode = null;
+                saveMindmap();
+                renderLines();
+            }
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchEnd);
+            document.removeEventListener('touchcancel', onTouchEnd);
+        }
+
+        // ----- Helper: render only lines (for performance during drag) -----
+        function renderLines() {
+            if (!mindmapData) return;
+            let svgContent = '';
+            function traverse(node, parentId) {
+                if (!node) return;
+                if (parentId !== null) {
+                    const parent = findNodeById(mindmapData, parentId);
+                    if (parent) {
+                        svgContent += `<path d="M${parent.x},${parent.y} L${node.x},${node.y}" />`;
                     }
+                }
+                if (node.children) {
+                    for (let child of node.children) {
+                        traverse(child, node.id);
+                    }
+                }
+            }
+            traverse(mindmapData, null);
+            mindmapSvg.innerHTML = svgContent;
+        }
+
+        // ============================================================
+        // 6. MAIN ACTIONS
+        // ============================================================
+
+        // Create mindmap from journal input
+        function createMindmap() {
+            const text = journalInput.value.trim();
+            if (!text) {
+                journalInput.placeholder = 'Please write something first…';
+                journalInput.style.borderColor = '#f7a08c';
+                setTimeout(() => { journalInput.style.borderColor = ''; }, 1500);
+                return;
+            }
+            // Reset mindmap data with a single root
+            mindmapData = {
+                id: nextId++,
+                text: text,
+                children: [],
+                x: 0,
+                y: 0
+            };
+            autoLayout(); // positions and renders
+            saveMindmap();
+            // Clear input
+            journalInput.value = '';
+        }
+
+        // Clear mindmap
+        function clearMindmap() {
+            if (mindmapData && !confirm('Clear your mindmap?')) return;
+            mindmapData = null;
+            nextId = 1;
+            localStorage.removeItem('yurika_journal_mindmap');
+            localStorage.removeItem('yurika_journal_nextId');
+            renderMindmap();
+        }
+
+        // ============================================================
+        // 7. INITIALISATION
+        // ============================================================
+
+        // Load saved mindmap
+        const loaded = loadMindmap();
+        if (loaded) {
+            // If loaded, render already done in loadMindmap, but we need to attach events
+            // renderMindmap called inside loadMindmap -> so fine.
+        } else {
+            // Show empty state
+            renderMindmap();
+        }
+
+        // Event listeners for buttons
+        createBtn.addEventListener('click', createMindmap);
+        autoLayoutBtn.addEventListener('click', () => {
+            if (mindmapData) {
+                autoLayout();
+                saveMindmap();
+            }
+        });
+        clearBtn.addEventListener('click', clearMindmap);
+
+        // Also allow Enter in journal input to create (Ctrl+Enter)
+        journalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                createMindmap();
+            }
+        });
+
+        // ============================================================
+        // 8. PWA SERVICE WORKER (optional)
+        // ============================================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                    console.log('🌸 Yurika PWA: Service Worker registered successfully!', reg);
+                }).catch(function(err) {
+                    console.log('🌸 Yurika PWA: Service Worker registration failed.', err);
                 });
-            }
-
-            // ============================================================
-            // 7. TAB SWITCHING
-            // ============================================================
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    const target = this.dataset.tab;
-                    Object.values(panes).forEach(p => p.classList.remove('active'));
-                    document.getElementById(target).classList.add('active');
-                });
             });
+        }
 
-            // ============================================================
-            // 8. AMBIENT FULLSCREEN (unchanged)
-            // ============================================================
-            function openFullscreen(sceneKey) {
-                const idx = sceneKeys.indexOf(sceneKey);
-                if (idx === -1) return;
-                currentSceneIndex = idx;
-                fsOverlay.classList.add('open');
-                updateScene();
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen().catch(() => {});
-                }
-                fsOverlay.classList.add('touch-active');
-                clearTimeout(window._fsTouchTimer);
-                window._fsTouchTimer = setTimeout(() => { fsOverlay.classList.remove('touch-active'); }, 3000);
-            }
-
-            function closeFullscreen() {
-                fsOverlay.classList.remove('open');
-                if (document.fullscreenElement) {
-                    document.exitFullscreen().catch(() => {});
-                }
-            }
-
-            function updateScene() {
-                fsScenes.forEach((el, i) => {
-                    el.classList.toggle('active', i === currentSceneIndex);
-                });
-            }
-
-            function nextScene() {
-                currentSceneIndex = (currentSceneIndex + 1) % sceneKeys.length;
-                updateScene();
-                fsOverlay.classList.add('touch-active');
-                clearTimeout(window._fsTouchTimer2);
-                window._fsTouchTimer2 = setTimeout(() => { fsOverlay.classList.remove('touch-active'); }, 2000);
-            }
-
-            function prevScene() {
-                currentSceneIndex = (currentSceneIndex - 1 + sceneKeys.length) % sceneKeys.length;
-                updateScene();
-                fsOverlay.classList.add('touch-active');
-                clearTimeout(window._fsTouchTimer3);
-                window._fsTouchTimer3 = setTimeout(() => { fsOverlay.classList.remove('touch-active'); }, 2000);
-            }
-
-            ambientCards.forEach(card => {
-                card.addEventListener('click', () => { openFullscreen(card.dataset.scene); });
-            });
-
-            fsExit.addEventListener('click', closeFullscreen);
-            fsNext.addEventListener('click', nextScene);
-            fsPrev.addEventListener('click', prevScene);
-
-            document.addEventListener('keydown', (e) => {
-                if (!fsOverlay.classList.contains('open')) return;
-                if (e.key === 'Escape') closeFullscreen();
-                if (e.key === 'ArrowRight') nextScene();
-                if (e.key === 'ArrowLeft') prevScene();
-                if (e.key === ' ' || e.key === 'f') {
-                    e.preventDefault();
-                    isAudioOn = !isAudioOn;
-                    const hint = document.querySelector('.fs-audio-hint');
-                    hint.textContent = isAudioOn ? '🔊 Audio: ON (simulated)' : '🔇 Audio: OFF (simulated)';
-                    hint.style.opacity = '1';
-                    setTimeout(() => { hint.style.opacity = '0.6'; }, 1500);
-                }
-            });
-
-            let touchStartX = 0;
-            fsOverlay.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            fsOverlay.addEventListener('touchend', (e) => {
-                const diffX = e.changedTouches[0].screenX - touchStartX;
-                if (Math.abs(diffX) > 40) {
-                    if (diffX > 0) prevScene();
-                    else nextScene();
-                }
-                const now = Date.now();
-                if (now - (fsOverlay._lastTap || 0) < 300) {
-                    isAudioOn = !isAudioOn;
-                    const hint = document.querySelector('.fs-audio-hint');
-                    hint.textContent = isAudioOn ? '🔊 Audio: ON (simulated)' : '🔇 Audio: OFF (simulated)';
-                    hint.style.opacity = '1';
-                    setTimeout(() => { hint.style.opacity = '0.6'; }, 1500);
-                }
-                fsOverlay._lastTap = now;
-                fsOverlay.classList.add('touch-active');
-                clearTimeout(window._fsTouchTimer4);
-                window._fsTouchTimer4 = setTimeout(() => { fsOverlay.classList.remove('touch-active'); }, 2000);
-            }, { passive: true });
-
-            fsOverlay.addEventListener('click', (e) => {
-                if (e.target === fsOverlay) closeFullscreen();
-            });
-
-            document.addEventListener('fullscreenchange', () => {
-                if (!document.fullscreenElement && fsOverlay.classList.contains('open')) {
-                    closeFullscreen();
-                }
-            });
-
-            // ============================================================
-            // 9. PWA: SERVICE WORKER REGISTRATION
-            // ============================================================
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                        console.log('🌸 Yurika PWA: Service Worker registered successfully!', reg);
-                    }).catch(function(err) {
-                        console.log('🌸 Yurika PWA: Service Worker registration failed.', err);
-                    });
-                });
-            }
-
-            // ============================================================
-            // 10. WELCOME MESSAGE
-            // ============================================================
-            setTimeout(() => {
-                suggestionBanner.classList.add('show');
-                suggestionText.innerHTML = 'Welcome to Yurika. 🌱 Share a problem, then <strong>select a path</strong> to see the next steps.';
-            }, 500);
-
-            console.log('🌸 Yurika v3.0 – AI powered with Gemini. Enjoy the calm.');
-        })();
-    </script>
+        console.log('🌸 Yurika Journal – Mindmap ready. Enjoy your clarity.');
+    })();
+</script>
 
 </body>
 </html>
